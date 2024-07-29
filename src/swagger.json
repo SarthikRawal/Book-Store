@@ -1,0 +1,125 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Book-Store API",
+        "version": "1.0.0",
+        "description": "API documentation for my Express project"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api/v1",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Welcome endpoint",
+                "responses": {
+                    "200": {
+                        "description": "Returns a welcome message",
+                        "schema": {
+                            "type": "string",
+                            "example": "Welcome"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/": {
+            "post": {
+                "tags": [
+                    "Users Part"
+                ],
+                "summary": "Sign up a new user",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "User details",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User created successfully"
+                    },
+                    "400": {
+                        "description": "User already exists"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/users/signIn": {
+            "post": {
+                "tags": [
+                    "Users Part"
+                ],
+                "summary": "Sign in a user",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "credentials",
+                        "description": "User credentials",
+                        "schema": {
+                            "$ref": "#/definitions/Credentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User signed in successfully"
+                    },
+                    "400": {
+                        "description": "Invalid credentials"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Credentials": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Enter your bearer token in the format **Bearer &lt;token&gt;**"
+        }
+    }
+}
