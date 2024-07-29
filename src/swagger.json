@@ -82,6 +82,40 @@
                     }
                 }
             }
+        },
+        "/users/forget-password": {
+            "post": {
+                "tags": [
+                    "Users Part"
+                ],
+                "summary": "Forget password",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "credentials",
+                        "description": "User credentials",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User signed in successfully"
+                    },
+                    "400": {
+                        "description": "Invalid credentials"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
