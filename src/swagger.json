@@ -54,7 +54,7 @@
                 }
             }
         },
-        "/users/signIn": {
+        "/users/signin": {
             "post": {
                 "tags": [
                     "Users Part"
@@ -83,7 +83,7 @@
                 }
             }
         },
-        "/users/forget-password": {
+        "/users/forgetpassword": {
             "post": {
                 "tags": [
                     "Users Part"

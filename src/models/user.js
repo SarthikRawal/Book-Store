@@ -23,8 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.STRING,
         values: ['admin', 'customer'],
-        allowNull: false,
-        defaultValue: 'customer'
+        allowNull: false
       }
     },
     {

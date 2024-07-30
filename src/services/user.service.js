@@ -10,13 +10,6 @@ const secretKey = process.env.JWT_SECRET
 //user registeration
 export const signUp = async (userDetails) => {
   userDetails.password = await bcrypt.hash(userDetails.password, 10);
-  if (userDetails.role === 'admin') {
-    const adminUser = await User.findOne({
-      where: { role: 'admin' }
-    });
-    if (adminUser) throw new Error('An admin user already exists');
-  }
-
   return await User.create(userDetails);
 };
 
