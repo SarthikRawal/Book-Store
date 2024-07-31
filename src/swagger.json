@@ -116,6 +116,69 @@
                     }
                 }
             }
+        },
+        "/users/resetpassword": {
+            "post": {
+                "tags": [
+                    "Users Part"
+                ],
+                "summary": "Reset password",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "credentials",
+                        "description": "User credentials",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User signed in successfully"
+                    },
+                    "400": {
+                        "description": "Invalid credentials"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/books/": {
+            "post": {
+                "tags": [
+                    "Books Part"
+                ],
+                "summary": "Get all books",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "book",
+                        "description": "Getting all books",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User created successfully"
+                    },
+                    "400": {
+                        "description": "User already exists"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {

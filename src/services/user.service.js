@@ -108,14 +108,22 @@ export const forgetPassword = async (email) => {
   }
 }
 
-export const resetPassword = async ({ newPassword, userId }) => {
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-  newPassword = hashedPassword;
-  const user = await User.update({ password: newPassword }, { where: { id: userId } });
+export const resetPassword = async (newPassword, userId) => {
+  try {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    newPassword = hashedPassword;
+    const user = await User.update({ password: newPassword }, { where: { id: userId } });
 
-  return {
-    code: HttpStatus.OK,
-    data: user,
-    message: 'Password updated 🫡'
+    return {
+      code: HttpStatus.OK,
+      data: user,
+      message: 'Password updated 🫡'
+    }
+  } catch (error) {
+    return {
+      code: HttpStatus.BAD_GATEWAY,
+      data: [],
+      message: error.message
+    }
   }
 }

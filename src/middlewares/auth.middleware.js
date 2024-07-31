@@ -1,6 +1,7 @@
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-
+import dotenv from 'dotenv';
+dotenv.config();
 /**
  * Middleware to authenticate if user has a valid Authorization token
  * Authorization: Bearer <token>
