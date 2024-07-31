@@ -4,9 +4,8 @@ export const newUserValidator = (req, res, next) => {
   const schema = Joi.object({
     firstName: Joi.string().min(3).required(),
     lastName: Joi.string().min(3).required(),
-    email: Joi.string().min(3).required(),
+    email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
-    // role: Joi.string().valid('admin', 'customer'),
   })
   const { error, value } = schema.validate(req.body);
   if (error) {

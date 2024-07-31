@@ -3,33 +3,83 @@ import bcrypt from 'bcrypt';
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import { sendResetPasswordEmail } from '../utils/sendEmail';
+import { UniqueConstraintError } from 'sequelize';
 
 const User = require('../models/user')(sequelize, DataTypes);
 
 const secretKey = process.env.JWT_SECRET
 //user registeration
 export const signUp = async (userDetails) => {
-  userDetails.password = await bcrypt.hash(userDetails.password, 10);
-  return await User.create(userDetails);
+  try {
+    if (userDetails != null) {
+      userDetails.password = await bcrypt.hash(userDetails.password, 10);
+
+      const data = await User.create(userDetails);
+      return {
+        code: HttpStatus.CREATED,
+        data: data,
+        message: 'Created user successfully'
+      }
+    } else {
+      return {
+        code: HttpStatus.UNAUTHORIZED,
+        data: [],
+        message: 'Enter details correctly'
+      }
+    }
+  } catch (error) {
+    if (error instanceof UniqueConstraintError) {
+      return {
+        code: HttpStatus.BAD_REQUEST,
+        data: [],
+        message: 'User with this email already exists'
+      }
+    } else {
+      return {
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        data: [],
+        message: 'Somethinf went wrong'
+      }
+    }
+  }
 };
 
 export const signIn = async ({ email, password }) => {
-  const user = await User.findOne({ where: { email } });
+  try {
+    if (!email || !password) {
+      return {
+        code: HttpStatus.BAD_REQUEST,
+        data: [],
+        message: 'Email and password are required'
+      }
+    }
+    const user = await User.findOne({ where: { email } });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return {
+        code: HttpStatus.UNAUTHORIZED,
+        data: [],
+        message: 'Invalid email or password',
+      };
+    }
+
+    const token = jwt.sign({ userId: user.id, email: user.email }, secretKey);
+    //return for successfull log in
     return {
-      code: HttpStatus.UNAUTHORIZED,
-      data: [],
-      message: 'Invalid email or password',
+      code: HttpStatus.OK,
+      data: { token },
+      user: user,
+      message: 'Login Successful..!'
     };
+
+  } catch (error) {
+    return {
+      code: HttpStatus.INTERNAL_SERVER_ERROR,
+      data: [],
+      message: error.message
+    }
   }
 
-  const token = jwt.sign({ userId: user.id, email: user.email }, secretKey);
-  //return for successfull log in
-  return {
-    data: { token },
-    user: user,
-  };
 };
 
 export const forgetPassword = async (email) => {
