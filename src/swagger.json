@@ -122,6 +122,13 @@
                 "tags": [
                     "Users Part"
                 ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "$ref": "#/securityDefinitions"
+                        }
+                    }
+                ],
                 "summary": "Reset password",
                 "parameters": [
                     {
@@ -152,27 +159,69 @@
             }
         },
         "/books/": {
-            "post": {
+            "get": {
                 "tags": [
                     "Books Part"
                 ],
                 "summary": "Get all books",
+                "responses": {
+                    "201": {
+                        "description": "books fetched successfully"
+                    },
+                    "400": {
+                        "description": "Something went wrong"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/books/addbook": {
+            "post": {
+                "tags": [
+                    "Books Part"
+                ],
+                "summary": "Add books",
                 "parameters": [
                     {
                         "in": "body",
-                        "name": "book",
-                        "description": "Getting all books",
+                        "description": "Book details",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "type": "object",
+                            "properties": {
+                                "bookName": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "author": {
+                                    "type": "string"
+                                },
+                                "discountPrice": {
+                                    "type": "number"
+                                },
+                                "bookImage": {
+                                    "type": "string",
+                                    "format": "url"
+                                },
+                                "quantity": {
+                                    "type": "integer"
+                                },
+                                "price": {
+                                    "type": "number"
+                                }
+                            }
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "User created successfully"
+                        "description": "Book added successfully"
                     },
                     "400": {
-                        "description": "User already exists"
+                        "description": "Book already exists"
                     },
                     "500": {
                         "description": "Internal server error"
