@@ -24,7 +24,7 @@ export const addToCart = async (bookId, userId) => {
 
         console.log("Book", book);
         let cart = await Cart.findOne({ where: { userId } });
-        console.log("Cart", cart);
+        // console.log("Cart", cart);
 
         if (!cart) {
             // Create a new cart if it doesn't exist
@@ -36,12 +36,12 @@ export const addToCart = async (bookId, userId) => {
                         quantity: 1,
                         bookName: book.bookName,
                         author: book.author,
-                        price: parseFloat(book.price),
-                        discountPrice: parseFloat(book.discountPrice)
+                        price: book.price,
+                        discountPrice: book.discountedPrice
                     }
                 ],
-                totalPrice: parseFloat(book.price),
-                totalDiscountPrice: parseFloat(book.discountPrice),
+                totalPrice: book.price,
+                totalDiscountPrice: book.discountedPrice,
                 isOrderPlaced: false
             });
         } else {
@@ -56,13 +56,13 @@ export const addToCart = async (bookId, userId) => {
                     quantity: 1,
                     bookName: book.bookName,
                     author: book.author,
-                    price: parseFloat(book.price),
-                    discountPrice: parseFloat(book.discountPrice)
+                    price: book.price,
+                    discountPrice: book.discountedPrice
                 });
             }
 
             cart.totalPrice = parseFloat(cart.totalPrice) + parseFloat(book.price);
-            cart.totalDiscountPrice = parseFloat(cart.totalDiscountPrice) + parseFloat(book.discountPrice);
+            cart.totalDiscountPrice = parseFloat(cart.totalDiscountPrice) + parseFloat(book.discountedPrice);
 
             // Save the updated cart
             await Cart.update(
